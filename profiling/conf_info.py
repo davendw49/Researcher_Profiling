@@ -21,15 +21,16 @@ def get_conf_citation():
     except:
         print("Error: unable to fetch data")
     db.close()
-    for i in citation.keys():
-        print(citation[i])
+    return citation
+    # for i in citation.keys():
+    #     print(citation[i])
 
 # get_conf_citation()
 
 def get_jour_citation():
     db = pymysql.connect(host=config.ip, port=13306, user="readonly", passwd="readonly", db="mag-new-160205", charset='utf8')
     cursor = db.cursor()
-    sql = "SELECT PaperID, CitationCount, PaperPublishYear, JournalIDMappedToVenueName FROM `Papers` WHERE JournalIDMappedToVenueName in (SELECT JournalID FROM Journals WHERE UnderCS=1) LIMIT 10;"
+    sql = "SELECT PaperID, CitationCount, PaperPublishYear, JournalIDMappedToVenueName FROM `Papers` WHERE JournalIDMappedToVenueName in (SELECT JournalID FROM Journals WHERE UnderCS=1);"
     citation = {}
     try:
         cursor.execute(sql)
@@ -46,7 +47,41 @@ def get_jour_citation():
     except:
         print("Error: unable to fetch data")
     db.close()
-    for i in citation.keys():
-        print(citation[i])
+    return citation
+    # for i in citation.keys():
+    #     print(citation[i])
 
-get_jour_citation()
+# get_jour_citation()
+
+# factor = \sum [(2019-year) * 1/100 * citation]
+def get_impact(year=2019):
+    jcitation = get_jour_citation()
+    ccitation = get_conf_citation()
+    jimpact = {}
+    cimpact = {}
+    for key in jcitation.keys():
+        tmp = jcitation[key]
+        factor = 0
+        for y in tmp.keys():
+            factor += (year - int(y)) * 0.01 * tmp[y]
+        jimpact[key] = factor
+
+    for key in ccitation.keys():
+        tmp = ccitation[key]
+        factor = 0
+        for y in tmp.keys():
+            factor += (year - int(y)) * 0.01 * tmp[y]
+        cimpact[key] = factor
+
+    f1 = open("jimpact.txt", 'w', encoding='utf8')
+    f2 = open("cimpact.txt", 'w', encoding='utf8')
+
+    for item in jimpact.keys():
+        print(item, jimpact[item], file=f1)
+    for item in cimpact.keys():
+        print(item, cimpact[item], file=f2)
+
+    f1.close()
+    f2.close()
+
+get_impact()
