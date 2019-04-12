@@ -54,7 +54,7 @@ def get_jour_citation():
 # get_jour_citation()
 
 # factor = \sum [(2019-year) * 1/100 * citation]
-def get_impact(year=2019):
+def get_impact(year=2019, lambda=0.1):
     jcitation = get_jour_citation()
     ccitation = get_conf_citation()
     jimpact = {}
@@ -63,14 +63,14 @@ def get_impact(year=2019):
         tmp = jcitation[key]
         factor = 0
         for y in tmp.keys():
-            factor += (year - int(y)) * 0.01 * tmp[y]
+            factor += lambda * tmp[y]/(year - int(y)) 
         jimpact[key] = factor
 
     for key in ccitation.keys():
         tmp = ccitation[key]
         factor = 0
         for y in tmp.keys():
-            factor += (year - int(y)) * 0.01 * tmp[y]
+            factor += lambda * tmp[y]/(year - int(y)) 
         cimpact[key] = factor
 
     f1 = open("jimpact.txt", 'w', encoding='utf8')
