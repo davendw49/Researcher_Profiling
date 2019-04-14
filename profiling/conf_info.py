@@ -63,14 +63,14 @@ def get_impact(year=2019, l=0.1):
         tmp = jcitation[key]
         factor = 0
         for y in tmp.keys():
-            factor += l * tmp[y]/(year - int(y)) 
+            factor += l * tmp[y]/(year - int(y) + 1) 
         jimpact[key] = factor
 
     for key in ccitation.keys():
         tmp = ccitation[key]
         factor = 0
         for y in tmp.keys():
-            factor += l * tmp[y]/(year - int(y)) 
+            factor += l * tmp[y]/(year - int(y) + 1) 
         cimpact[key] = factor
 
     f1 = open("jimpact.txt", 'w', encoding='utf8')
