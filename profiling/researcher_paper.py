@@ -55,7 +55,7 @@ def get_researcher_papers(id):
 # get_researcher_papers("80008266")  
 
 def get_researcher_poapers_cj(paperid):
-    print(paperid)
+    # print(paperid)
     db = pymysql.connect(host="202.120.36.29", port=13306, user="readonly", passwd="readonly", db="mag-new-160205", charset='utf8')
     cursor = db.cursor()
     sql = "SELECT ConferenceSeriesIDMappedToVenueName, JournalIDMappedToVenueName, PaperPublishYear FROM Papers WHERE PaperID = '" + paperid + "' LIMIT 1;"
@@ -78,14 +78,3 @@ def get_researcher_poapers_cj(paperid):
         return "journal", journal[0], year[0]
     else:
         return "None", "None", "None"
-
-if __name__ == "__main__":
-    # print(get_pinyin("王新兵"))
-    sum=0
-    for paper in get_researcher_papers(get_researcher_id(get_pinyin("傅洛伊"))):
-        tmp = get_researcher_poapers_cj(paper)
-        if tmp != ("None", "None", "None"):
-            sum+=1
-            print(tmp)
-    # get_researcher_poapers_cj("1")
-    print("finish", sum)

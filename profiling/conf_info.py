@@ -84,4 +84,4 @@ def get_impact(year=2019, l=0.1):
     f1.close()
     f2.close()
 
-get_impact()
+# get_impact()
